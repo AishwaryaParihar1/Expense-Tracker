@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Moon, Sun } from 'lucide-react'; // or use emojis
+import { Moon, Sun } from 'lucide-react'; // ya koi bhi icon
 
 const ThemeToggle = () => {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
@@ -21,7 +21,7 @@ const ThemeToggle = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded focus:outline-none text-gray-800 dark:text-white"
+      className="p-2 rounded text-gray-800 dark:text-white"
       title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
     >
       {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}

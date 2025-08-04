@@ -1,17 +1,21 @@
 import React from 'react';
-
-import { Routes, Route } from "react-router-dom";
-import { Outlet } from "react-router-dom";
+import { Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import Navbar from './component/Navbar';
+import Footer from './component/Footer';
 
 const App = () => {
   return (
-    <>
-      {/* Navbar can go here if global */}
-      <Outlet />
-          <ToastContainer position="top-right" />
+    <div className="min-h-screen flex flex-col justify-between bg-lightBg dark:bg-darkBg text-lightText dark:text-darkText transition-colors duration-300">
+      <div>
+        
+       <Navbar/> 
+        <Outlet />
+        <ToastContainer position="top-right" />
+      </div>
 
-    </>
+      <Footer />
+    </div>
   );
 };
 
