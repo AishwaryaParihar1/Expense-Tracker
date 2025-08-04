@@ -5,6 +5,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/auth');
 const expenseRoutes = require('./routes/expenseRoutes'); 
+// const adminRoutes = require('./routes/adminRoutes'); 
 
 // Load environment variables
 dotenv.config();
@@ -26,6 +27,8 @@ app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);        
 app.use('/api/expenses', expenseRoutes);  
+app.use("/api/admin", require("./routes/adminRoutes")); 
+
 
 
 // Test route

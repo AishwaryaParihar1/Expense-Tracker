@@ -30,13 +30,18 @@ const ExpenseTable = ({ expenses, onChange }) => {
   };
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this expense?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this expense?"
+    );
     if (!confirmDelete) return;
 
     const token = localStorage.getItem("token");
-    await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/expenses/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    await axios.delete(
+      `${import.meta.env.VITE_BACKEND_URL}/api/expenses/${id}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     onChange();
   };
 
@@ -69,9 +74,13 @@ const ExpenseTable = ({ expenses, onChange }) => {
 
   const handleSave = async (id) => {
     const token = localStorage.getItem("token");
-    await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/expenses/${id}`, editData, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    await axios.put(
+      `${import.meta.env.VITE_BACKEND_URL}/api/expenses/${id}`,
+      editData,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     setEditId(null);
     onChange();
   };
@@ -92,11 +101,17 @@ const ExpenseTable = ({ expenses, onChange }) => {
     return matchesCategory && matchesStart && matchesEnd;
   });
 
-  const total = filteredExpenses.reduce((sum, exp) => sum + Number(exp.amount), 0);
+  const total = filteredExpenses.reduce(
+    (sum, exp) => sum + Number(exp.amount),
+    0
+  );
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentExpenses = filteredExpenses.slice(indexOfFirstItem, indexOfLastItem);
+  const currentExpenses = filteredExpenses.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
   const totalPages = Math.ceil(filteredExpenses.length / itemsPerPage);
 
   const handleExportCSV = () => {
@@ -164,85 +179,93 @@ const ExpenseTable = ({ expenses, onChange }) => {
             </tr>
           </thead>
           <tbody>
-            {currentExpenses.map((exp) => (
-              <tr key={exp._id} className="text-center border-b">
-                {editId === exp._id ? (
-                  <>
-                    <td>
-                      <input
-                        type="text"
-                        name="title"
-                        value={editData.title}
-                        onChange={handleChange}
-                        className="input w-full p-1 bg-white dark:bg-gray-800 text-black dark:text-white border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-primary shadow-sm"
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        name="amount"
-                        value={editData.amount}
-                        onChange={handleChange}
-                        className="input w-full p-1 bg-white dark:bg-gray-800 text-black dark:text-white border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-primary shadow-sm"
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        name="category"
-                        value={editData.category}
-                        onChange={handleChange}
-                        className="input w-full p-1 bg-white dark:bg-gray-800 text-black dark:text-white border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-primary shadow-sm"
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="date"
-                        name="date"
-                        value={editData.date}
-                        onChange={handleChange}
-                        className="input w-full p-1 bg-white dark:bg-gray-800 text-black dark:text-white border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-primary shadow-sm"
-                      />
-                    </td>
-                    <td className="flex gap-2 justify-center">
-                      <button
-                        onClick={() => handleSave(exp._id)}
-                        className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
-                      >
-                        Save
-                      </button>
-                      <button
-                        onClick={handleCancel}
-                        className="bg-gray-400 text-white px-2 py-1 rounded hover:bg-gray-500"
-                      >
-                        Cancel
-                      </button>
-                    </td>
-                  </>
-                ) : (
-                  <>
-                    <td className="p-2">{exp.title}</td>
-                    <td>₹{exp.amount}</td>
-                    <td>{exp.category}</td>
-                    <td>{formatDate(exp.date)}</td>
-                    <td className="flex gap-2 justify-center">
-                      <button
-                        onClick={() => handleEdit(exp)}
-                        className="text-blue-500 hover:underline"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(exp._id)}
-                        className="text-red-500 hover:underline"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </>
-                )}
+            {currentExpenses.length === 0 ? (
+              <tr>
+                <td colSpan="5" className="text-center text-gray-500 py-4">
+                  No data available
+                </td>
               </tr>
-            ))}
+            ) : (
+              currentExpenses.map((exp) => (
+                <tr key={exp._id} className="text-center border-b">
+                  {editId === exp._id ? (
+                    <>
+                      <td>
+                        <input
+                          type="text"
+                          name="title"
+                          value={editData.title}
+                          onChange={handleChange}
+                          className="input w-full p-1 bg-white dark:bg-gray-800 text-black dark:text-white border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-primary shadow-sm"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          name="amount"
+                          value={editData.amount}
+                          onChange={handleChange}
+                          className="input w-full p-1 bg-white dark:bg-gray-800 text-black dark:text-white border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-primary shadow-sm"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          name="category"
+                          value={editData.category}
+                          onChange={handleChange}
+                          className="input w-full p-1 bg-white dark:bg-gray-800 text-black dark:text-white border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-primary shadow-sm"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="date"
+                          name="date"
+                          value={editData.date}
+                          onChange={handleChange}
+                          className="input w-full p-1 bg-white dark:bg-gray-800 text-black dark:text-white border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-primary shadow-sm"
+                        />
+                      </td>
+                      <td className="flex gap-2 justify-center">
+                        <button
+                          onClick={() => handleSave(exp._id)}
+                          className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={handleCancel}
+                          className="bg-gray-400 text-white px-2 py-1 rounded hover:bg-gray-500"
+                        >
+                          Cancel
+                        </button>
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td className="p-2">{exp.title}</td>
+                      <td>₹{exp.amount}</td>
+                      <td>{exp.category}</td>
+                      <td>{formatDate(exp.date)}</td>
+                      <td className="flex gap-2 justify-center">
+                        <button
+                          onClick={() => handleEdit(exp)}
+                          className="text-blue-500 hover:underline"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(exp._id)}
+                          className="text-red-500 hover:underline"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </>
+                  )}
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
 
