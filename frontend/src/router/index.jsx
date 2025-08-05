@@ -10,6 +10,7 @@ import PrivateRoute from "../component/PrivateRoute";
 import UserDashboard from "../pages/dashboard/UserDashboard";
 import AdminDashboard from "../pages/dashboard/AdminDashboard";
 import ExpensePage from "../component/ExpensePage";
+import AdminUserExpenses from "../component/AdminUserExpenses";
 
 export const router = createBrowserRouter([
   {
@@ -19,7 +20,7 @@ export const router = createBrowserRouter([
       { path: "", element: <Register /> },
       { path: "login", element: <Login /> },
       { path: "user-expenses", element: <ExpensePage /> },
-     
+
       {
         path: "/user-dashboard",
         element: (
@@ -37,6 +38,14 @@ export const router = createBrowserRouter([
         ),
       },
 
+      {
+        path: "/admin-dashboard/user/:userId",
+        element: (
+          <PrivateRoute>
+            <AdminUserExpenses />
+          </PrivateRoute>
+        ),
+      },
       // other routes here
     ],
   },

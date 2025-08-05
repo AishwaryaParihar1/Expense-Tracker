@@ -29,3 +29,30 @@ exports.getUserExpenses = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch user expenses" });
   }
 };
+
+
+exports.deleteUserExpense = async (req, res) => {
+  try {
+    const { userId, expenseId } = req.params;
+    const expense = await Expense.findOneAndDelete({ _id: expenseId, user: userId });
+    if (!expense) return res.status(404).json({ message: "Expense not found" });
+    res.status(200).json({ message: "Expense deleted" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.updateUserExpense = async (req, res) => {
+  try {
+    const { userId, expenseId } = req.params;
+    const updated = await Expense.findOneAndUpdate(
+      { _id: expenseId, user: userId },
+      req.body,
+      { new: true }
+    );
+    if (!updated) return res.status(404).json({ message: "Expense not found" });
+    res.status(200).json(updated);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

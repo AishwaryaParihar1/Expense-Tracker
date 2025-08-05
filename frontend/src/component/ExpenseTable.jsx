@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const ExpenseTable = ({ expenses, onChange }) => {
+const ExpenseTable = ({ expenses, onChange, adminView = false, userId = null }) => {
+
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({
     title: "",
@@ -30,20 +31,22 @@ const ExpenseTable = ({ expenses, onChange }) => {
   };
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this expense?"
-    );
-    if (!confirmDelete) return;
+  const confirmDelete = window.confirm("Are you sure you want to delete this expense?");
+  if (!confirmDelete) return;
 
-    const token = localStorage.getItem("token");
-    await axios.delete(
-      `${import.meta.env.VITE_BACKEND_URL}/api/expenses/${id}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    onChange();
-  };
+  const token = localStorage.getItem("token");
+
+  const url = adminView
+    ? `${import.meta.env.VITE_BACKEND_URL}/api/admin/user-expenses/${userId}/${id}` // ✅ Admin endpoint
+    : `${import.meta.env.VITE_BACKEND_URL}/api/expenses/${id}`; // ✅ User endpoint
+
+  await axios.delete(url, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  onChange(); // Refresh list
+};
+
 
   const handleEdit = (exp) => {
     setEditId(exp._id);
@@ -72,18 +75,21 @@ const ExpenseTable = ({ expenses, onChange }) => {
     });
   };
 
-  const handleSave = async (id) => {
-    const token = localStorage.getItem("token");
-    await axios.put(
-      `${import.meta.env.VITE_BACKEND_URL}/api/expenses/${id}`,
-      editData,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    setEditId(null);
-    onChange();
-  };
+const handleSave = async (id) => {
+  const token = localStorage.getItem("token");
+
+  const url = adminView
+    ? `${import.meta.env.VITE_BACKEND_URL}/api/admin/user-expenses/${userId}/${id}` // ✅ Admin update
+    : `${import.meta.env.VITE_BACKEND_URL}/api/expenses/${id}`; // ✅ User update
+
+  await axios.put(url, editData, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  setEditId(null);
+  onChange();
+};
+
 
   const resetFilters = () => {
     setCategoryFilter("");

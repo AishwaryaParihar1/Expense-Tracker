@@ -1,8 +1,15 @@
+import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const AdminUserList = ({ onUserClick }) => {
   const [users, setUsers] = useState([]);
+
+    const navigate = useNavigate();
+
+  const handleViewExpenses = (user) => {
+    navigate(`/admin-dashboard/user/${user._id}`, { state: user });
+  };
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -35,8 +42,7 @@ const AdminUserList = ({ onUserClick }) => {
               <td>{user.name}</td>
               <td>{user.email}</td>
               <td>
-                <button
-                  onClick={() => onUserClick(user)}
+               <button onClick={() => handleViewExpenses(user)}
                   className="text-primary hover:font-semibold"
                 >
                   View Expenses
